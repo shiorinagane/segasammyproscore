@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>プロ個人戦 最終結果｜セガサミー チャリティープロアマ</title>
+<script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+<style>
+  :root {
+    --green: #63b253;
+    --green-soft: #9acd8f;
+    --green-deep: #457d3a;
+    --blue: #0082ca;
+    --silver: #aab4ad;
+    --bronze: #bd7f52;
+    --paper: #faf6ec;
+    --paper-line: rgba(20, 34, 24, 0.12);
+    --ink: #17281d;
+    --ink-dim: rgba(23, 40, 29, 0.62);
+    --on-gradient: #ffffff;
+    --on-gradient-dim: rgba(255, 255, 255, 0.86);
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    min-height: 100%;
+  }
+
+  body {
+    background: linear-gradient(135deg, var(--green) 0%, var(--blue) 100%) fixed;
+    color: var(--on-gradient);
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    position: relative;
+    max-width: 420px;
+    margin: 0 auto;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ---------- Header ---------- */
+  .header {
+    position: relative;
+    padding: calc(26px + env(safe-area-inset-top)) 22px 84px;
+    text-shadow: 0 1px 3px rgba(0, 20, 10, 0.16);
+    overflow: hidden;
+  }
+  .header::after {
+    content: "";
+    position: absolute;
+    inset: auto -20% -60% -20%;
+    height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(255,255,255,0.14), transparent 70%);
+    pointer-events: none;
+  }
+
+  .brand-logo {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .brand-logo img {
+    width: 200px;
+    height: auto;
+  }
+
+  h1.title {
+    margin: 2px 0 10px;
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+  }
+
+  .scoreboard-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .scoreboard-label span {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.32em;
+    color: var(--on-gradient);
+    white-space: nowrap;
+  }
+  .scoreboard-label i {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.6), transparent);
+  }
+
+  .desc {
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--on-gradient-dim);
+    white-space: nowrap;
+  }
+
+  .updated {
+    margin-top: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: var(--on-gradient-dim);
+    font-variant-numeric: tabular-nums;
+  }
+  .updated b {
+    color: var(--on-gradient);
+    font-weight: 700;
+    padding: 3px 8px;
+    background: rgba(255,255,255,0.16);
+    border-radius: 6px;
+  }
+
+  /* ---------- Podium ---------- */
+  .podium-wrap {
+    margin: -58px 16px 0;
+    position: relative;
+    z-index: 2;
+  }
+
+  .podium {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .rank-card {
+    background: var(--paper);
+    border-radius: 16px;
+    padding: 16px 14px;
+    color: var(--ink);
+    box-shadow: 0 14px 24px -14px rgba(0,0,0,0.45);
+    display: flex;
+    gap: 10px;
+  }
+
+  .rank-card.first {
+    align-items: center;
+    padding: 18px 18px;
+    border: 1.5px solid rgba(99,178,83,0.55);
+    background:
+      linear-gradient(120deg, rgba(99,178,83,0.16), transparent 55%),
+      var(--paper);
+  }
+
+  .rank-card.second, .rank-card.third {
+    align-items: center;
+    padding: 14px 16px;
+  }
+
+  .rank-badge {
+    flex-shrink: 0;
+    width: 46px; height: 46px;
+    object-fit: contain;
+  }
+  .first .rank-badge { width: 62px; height: 62px; }
+
+  .rank-player {
+    flex: 1;
+    font-size: 13.5px;
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--ink);
+    overflow-wrap: anywhere;
+  }
+  .first .rank-player { font-size: 16px; }
+  .second .rank-player, .third .rank-player { font-size: 12.5px; }
+
+  .stat { display: flex; flex-direction: column; gap: 2px; margin-left: auto; text-align: right; }
+
+  .rank-score-label {
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: var(--ink-dim);
+  }
+
+  .rank-score {
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    font-size: 22px;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .first .rank-score { font-size: 32px; color: var(--green-deep); }
+  .rank-score.zero { color: var(--ink-dim); }
+
+  /* ---------- Table ---------- */
+  .table-card {
+    margin: 14px 16px 0;
+    background: var(--paper);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 14px 24px -18px rgba(0,0,0,0.4);
+    color: var(--ink);
+  }
+
+  .table-head {
+    display: grid;
+    grid-template-columns: 40px 1fr 70px;
+    gap: 6px;
+    padding: 12px 16px;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--ink-dim);
+    border-bottom: 1px solid var(--paper-line);
+  }
+  .table-head span:last-child { text-align: right; }
+
+  .row {
+    display: grid;
+    grid-template-columns: 40px 1fr 70px;
+    gap: 6px;
+    align-items: center;
+    padding: 12px 16px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--paper-line);
+  }
+  .row:last-child { border-bottom: none; }
+  .row:nth-child(even) { background: rgba(20,34,24,0.03); }
+
+  .row .rank {
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-dim);
+  }
+  .row .player { font-weight: 600; overflow-wrap: anywhere; }
+  .row .score {
+    text-align: right;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    font-size: 15px;
+  }
+  .score.plus { color: #a8493a; }
+  .score.minus { color: var(--green-deep); }
+  .score.zero { color: var(--ink-dim); }
+
+  /* ---------- Footer ---------- */
+  .footer {
+    margin-top: auto;
+    padding: 26px 22px calc(26px + env(safe-area-inset-bottom));
+    text-shadow: 0 1px 3px rgba(0, 20, 40, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .footer .brand {
+    font-size: 11.5px;
+    color: var(--on-gradient-dim);
+    line-height: 1.6;
+  }
+  .footer .brand b { color: var(--on-gradient); display: block; font-size: 12.5px; font-weight: 700; }
+  .footer a.link {
+    font-size: 11.5px;
+    color: var(--on-gradient);
+    font-weight: 700;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+  .footer a.link:focus-visible { outline: 2px solid #fff; outline-offset: 3px; border-radius: 4px; }
+
+  /* ---------- 状態表示 ---------- */
+  .state {
+    margin: -58px 16px 0;
+    position: relative;
+    z-index: 2;
+    background: var(--paper);
+    border-radius: 16px;
+    padding: 36px 20px;
+    color: var(--ink);
+    text-align: center;
+    box-shadow: 0 14px 24px -14px rgba(0,0,0,0.45);
+  }
+  .state .state-title { font-size: 14px; font-weight: 700; margin: 0 0 6px; }
+  .state .state-text { font-size: 12px; color: var(--ink-dim); line-height: 1.8; margin: 0; }
+  .state button {
+    margin-top: 16px;
+    padding: 10px 26px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--green);
+    border: none;
+    border-radius: 100px;
+    cursor: pointer;
+  }
+  .state button:focus-visible { outline: 2px solid var(--green-deep); outline-offset: 2px; }
+
+  .spinner {
+    width: 28px; height: 28px;
+    margin: 0 auto 14px;
+    border-radius: 50%;
+    border: 3px solid rgba(23,40,29,0.15);
+    border-top-color: var(--green);
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .hidden { display: none !important; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .rank-card, .row { animation: rise 0.5s ease both; }
+    .row:nth-child(2) { animation-delay: 0.02s; }
+    .row:nth-child(3) { animation-delay: 0.06s; }
+    .row:nth-child(4) { animation-delay: 0.10s; }
+    .row:nth-child(5) { animation-delay: 0.14s; }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .spinner { animation-duration: 1.6s; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="header">
+    <div class="brand-logo"><img src="img/logo_segasammy.png" alt="SEGA Sammy Charity Pro-Am"></div>
+    <h1 class="title">プロ個人戦 最終結果</h1>
+    <div class="scoreboard-label"><span>PRO FINAL SCORE</span><i></i></div>
+    <p class="desc" id="desc">&nbsp;</p>
+    <div class="updated hidden" id="updated-wrap">更新<b id="updated"></b><span id="label"></span></div>
+  </div>
+
+  <!-- ローディング -->
+  <div class="state" id="loading">
+    <div class="spinner" aria-hidden="true"></div>
+    <p class="state-title">結果を読み込んでいます</p>
+    <p class="state-text">少々お待ちください</p>
+  </div>
+
+  <!-- 準備中 -->
+  <div class="state hidden" id="preparing">
+    <p class="state-title">結果は準備中です</p>
+    <p class="state-text">最終結果の発表をお待ちください。<br>発表後にもう一度開くと結果が表示されます。</p>
+  </div>
+
+  <!-- エラー -->
+  <div class="state hidden" id="error">
+    <p class="state-title">読み込みに失敗しました</p>
+    <p class="state-text">通信環境をご確認のうえ、再読み込みしてください。</p>
+    <button type="button" onclick="loadRanking()">再読み込み</button>
+  </div>
+
+  <!-- 結果本体 -->
+  <div id="ranking" class="hidden">
+    <div class="podium-wrap">
+      <div class="podium" id="podium"></div>
+    </div>
+
+    <div class="table-card hidden" id="table">
+      <div class="table-head"><span>順位</span><span>選手名</span><span>スコア</span></div>
+      <div id="rows"></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="brand"><b>SEGA SAMMY</b>公式LINEアカウント</div>
+    <a class="link hidden" id="site-link" href="" target="_blank" rel="noopener">大会公式サイト ›</a>
+  </div>
+</div>
+
+<script>
+// ======== 設定（セットアップ時にここだけ書き換える） ========
+const GAS_URL  = 'https://script.google.com/macros/s/AKfycbz6m9NKKBT1cWV0qZ8NVuLV52vG12pK0-3qinBsfjHTdIbbHHJHbDsjs70YNo14raYB/exec'; // https://script.google.com/macros/s/…/exec
+const LIFF_ID  = ''; // LINE DevelopersでLIFF作成後に発行されるID（例 1234567890-abcdefgh）
+const SITE_URL = 'https://www.segasammy-cup.jp/'; // 大会公式サイトのURL。空ならリンク非表示
+// ==========================================================
+
+// LIFF初期化（失敗してもランキング表示は続行する）
+if (LIFF_ID && typeof liff !== 'undefined') {
+  liff.init({ liffId: LIFF_ID }).catch(function (e) {
+    console.warn('LIFF init failed:', e);
+  });
+}
+
+if (SITE_URL) {
+  const link = document.getElementById('site-link');
+  link.href = SITE_URL;
+  link.classList.remove('hidden');
+}
+
+function show(id) {
+  ['loading', 'preparing', 'error', 'ranking'].forEach(function (key) {
+    document.getElementById(key).classList.toggle('hidden', key !== id);
+  });
+}
+
+function formatPoint(n) {
+  if (n > 0) return { text: '+' + n, cls: 'plus' };
+  if (n < 0) return { text: '−' + Math.abs(n), cls: 'minus' };
+  return { text: '0', cls: 'zero' };
+}
+
+const PODIUM_VARIANT = { '1': 'first', '2': 'second', '3': 'third' };
+
+function createPodiumCard(row) {
+  const variant = PODIUM_VARIANT[row.rank];
+  const card = document.createElement('div');
+  card.className = 'rank-card ' + variant;
+
+  const badge = document.createElement('img');
+  badge.className = 'rank-badge';
+  badge.src = 'img/rank' + row.rank + '.png';
+  badge.alt = row.rank + '位';
+  card.appendChild(badge);
+
+  const player = document.createElement('div');
+  player.className = 'rank-player';
+  player.textContent = row.player;
+  card.appendChild(player);
+
+  const stat = document.createElement('div');
+  stat.className = 'stat';
+
+  const label = document.createElement('div');
+  label.className = 'rank-score-label';
+  label.textContent = 'SCORE';
+  stat.appendChild(label);
+
+  const p = formatPoint(row.score);
+  const score = document.createElement('div');
+  score.className = 'rank-score' + (p.cls === 'zero' ? ' zero' : '');
+  score.textContent = p.text;
+  stat.appendChild(score);
+
+  card.appendChild(stat);
+  return card;
+}
+
+function render(data) {
+  document.getElementById('desc').textContent = data.desc || '';
+  const updatedWrap = document.getElementById('updated-wrap');
+  if (data.updated) {
+    document.getElementById('updated').textContent = data.updated + ' 時点';
+    document.getElementById('label').textContent = data.label ? '／' + data.label : '';
+    updatedWrap.classList.remove('hidden');
+  } else {
+    updatedWrap.classList.add('hidden');
+  }
+
+  const rows = data.rows || [];
+  const podiumRows = rows.filter(function (row) { return PODIUM_VARIANT[row.rank]; });
+  const tableRows = rows.filter(function (row) { return !PODIUM_VARIANT[row.rank]; });
+
+  const podium = document.getElementById('podium');
+  podium.innerHTML = '';
+  podiumRows.forEach(function (row) { podium.appendChild(createPodiumCard(row)); });
+
+  const table = document.getElementById('table');
+  const container = document.getElementById('rows');
+  container.innerHTML = '';
+  if (tableRows.length === 0) {
+    table.classList.add('hidden');
+  } else {
+    table.classList.remove('hidden');
+    tableRows.forEach(function (row) {
+      const div = document.createElement('div');
+      div.className = 'row';
+      const p = formatPoint(row.score);
+      const rank = document.createElement('span');
+      rank.className = 'rank';
+      rank.textContent = row.rank;
+      const player = document.createElement('span');
+      player.className = 'player';
+      player.textContent = row.player;
+      const score = document.createElement('span');
+      score.className = 'score ' + p.cls;
+      score.textContent = p.text;
+      div.appendChild(rank);
+      div.appendChild(player);
+      div.appendChild(score);
+      container.appendChild(div);
+    });
+  }
+
+  show('ranking');
+}
+
+function loadRanking() {
+  show('loading');
+  const url = GAS_URL + (GAS_URL.indexOf('?') >= 0 ? '&' : '?') + 'v=' + Date.now();
+  fetch(url)
+    .then(function (res) {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    })
+    .then(function (data) {
+      if (data.status === 'ok') {
+        render(data);
+      } else if (data.status === 'preparing') {
+        show('preparing');
+      } else {
+        throw new Error(data.message || 'unknown');
+      }
+    })
+    .catch(function (e) {
+      console.error(e);
+      show('error');
+    });
+}
+
+loadRanking();
+</script>
+</body>
+</html>
