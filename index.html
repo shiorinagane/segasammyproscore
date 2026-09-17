@@ -192,8 +192,7 @@
     line-height: 1;
     color: var(--ink);
   }
-  .first .rank-score { font-size: 32px; color: var(--green-deep); }
-  .rank-score.zero { color: var(--ink-dim); }
+  .first .rank-score { font-size: 32px; }
 
   /* ---------- Table ---------- */
   .table-card {
@@ -242,9 +241,6 @@
     font-variant-numeric: tabular-nums;
     font-size: 15px;
   }
-  .score.plus { color: #a8493a; }
-  .score.minus { color: var(--green-deep); }
-  .score.zero { color: var(--ink-dim); }
 
   /* ---------- Footer ---------- */
   .footer {
@@ -377,7 +373,7 @@
 <script>
 // ======== 設定（セットアップ時にここだけ書き換える） ========
 const GAS_URL  = 'https://script.google.com/macros/s/AKfycbz6m9NKKBT1cWV0qZ8NVuLV52vG12pK0-3qinBsfjHTdIbbHHJHbDsjs70YNo14raYB/exec'; // https://script.google.com/macros/s/…/exec
-const LIFF_ID  = ''; // LINE DevelopersでLIFF作成後に発行されるID（例 1234567890-abcdefgh）
+const LIFF_ID  = '2010659810-EztGy7pB'; // LINE DevelopersでLIFF作成後に発行されるID（例 1234567890-abcdefgh）
 const SITE_URL = 'https://www.segasammy-cup.jp/'; // 大会公式サイトのURL。空ならリンク非表示
 // ==========================================================
 
@@ -400,10 +396,9 @@ function show(id) {
   });
 }
 
+// 入力された数値をそのまま表示する（＋を足したり符号を変えたりしない・色分けもしない）
 function formatPoint(n) {
-  if (n > 0) return { text: '+' + n, cls: 'plus' };
-  if (n < 0) return { text: '−' + Math.abs(n), cls: 'minus' };
-  return { text: '0', cls: 'zero' };
+  return { text: String(n), cls: '' };
 }
 
 const PODIUM_VARIANT = { '1': 'first', '2': 'second', '3': 'third' };
